@@ -3,11 +3,10 @@
 <head>
     <!--
         Author: Leah Pittman
-        Date: October 18, 2026
-        Purpose: Create an interactive personal portfolio.
-        Use conditional logic to display featured content.
-        Display skills using an array and loop.
-        Add dark mode and a personalized contact form alert.
+        Date: October 25, 2026
+        Purpose: Build an interactive personal portfolio.
+        Use arrays, loops, conditional logic, and DOM methods.
+        Include dark mode and a timed contact form confirmation.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,17 +21,17 @@
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
             background-color: #fff8f3;
-            color: #333;
+            color: #333333;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
         }
 
         header {
             background-color: #704060;
             color: white;
-            text-align: center;
             padding: 25px;
+            text-align: center;
         }
 
         header h1 {
@@ -47,21 +46,20 @@
         }
 
         #darkMode {
-            width: auto;
             margin: 0;
         }
 
-        /* Navigation links. */
+        /* Navigation menu. */
         nav {
             background-color: #ead4e1;
-            text-align: center;
             padding: 15px;
+            text-align: center;
         }
 
         nav a {
             display: inline-block;
-            color: #442238;
             margin: 5px 15px;
+            color: #442238;
             font-weight: bold;
         }
 
@@ -72,9 +70,9 @@
         }
 
         section {
-            background-color: white;
-            padding: 25px;
             margin-bottom: 20px;
+            padding: 25px;
+            background-color: white;
             border-radius: 10px;
         }
 
@@ -82,7 +80,11 @@
             margin-top: 0;
         }
 
-        /* Project cards and linked images. */
+        a {
+            color: #704060;
+        }
+
+        /* Project cards. */
         .projects {
             display: flex;
             flex-wrap: wrap;
@@ -104,8 +106,8 @@
         }
 
         .featured-box {
-            padding: 20px;
             margin-top: 15px;
+            padding: 20px;
             border: 2px solid #704060;
             border-radius: 8px;
         }
@@ -114,12 +116,11 @@
             max-width: 350px;
         }
 
-        /* Ensure hidden featured content stays hidden. */
         [hidden] {
             display: none !important;
         }
 
-        /* Contact form styling. */
+        /* Contact form. */
         #contactForm label {
             display: block;
             margin-top: 12px;
@@ -129,20 +130,20 @@
         #contactForm input,
         #contactForm textarea {
             width: 100%;
-            padding: 10px;
             margin-top: 5px;
-            border: 1px solid #999;
+            padding: 10px;
+            border: 1px solid #999999;
             border-radius: 5px;
             font: inherit;
         }
 
         button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
             background-color: #704060;
             color: white;
-            border: none;
-            padding: 12px 20px;
-            margin-top: 15px;
-            border-radius: 5px;
             font: inherit;
             cursor: pointer;
         }
@@ -151,12 +152,22 @@
             background-color: #552d48;
         }
 
-        footer {
-            text-align: center;
-            padding: 20px;
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
-        /* Dark mode styling. */
+        #formStatus {
+            min-height: 1.6em;
+            font-weight: bold;
+        }
+
+        footer {
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Dark mode colors. */
         body.dark-mode {
             background-color: #161616;
             color: #f5f5f5;
@@ -178,9 +189,9 @@
 
         body.dark-mode input,
         body.dark-mode textarea {
-            background-color: #333;
+            background-color: #333333;
             color: white;
-            border-color: #aaa;
+            border-color: #aaaaaa;
         }
 
         body.dark-mode .featured-box {
@@ -194,13 +205,13 @@
         <h1>Leah Pittman's Portfolio</h1>
         <p id="welcome">Welcome to my portfolio!</p>
 
-        <!-- Checkbox switches between light and dark mode. -->
         <label for="darkMode" class="theme-control">
             <input type="checkbox" id="darkMode">
             Dark Mode
         </label>
     </header>
 
+    <!-- Navigation links to the main sections. -->
     <nav aria-label="Main navigation">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
@@ -215,7 +226,7 @@
                 My name is Leah Pittman. I am studying Information
                 Technology with a focus on Software and AI at ECPI
                 University. I enjoy learning about technology and
-                building my programming and web development skills.
+                developing my programming and web development skills.
             </p>
 
             <p>
@@ -226,23 +237,21 @@
 
             <h3>My Skills</h3>
 
-            <!-- JavaScript adds the skills to this list. -->
+            <!-- JavaScript will populate this list. -->
             <ul id="skillsList"></ul>
         </section>
 
-        <!-- Featured Content appears directly below About. -->
+        <!-- JavaScript controls which featured groups are visible. -->
         <section id="featured">
             <h2>Featured Content</h2>
 
             <div id="universityResources" class="featured-box" hidden>
                 <h3>University Resources</h3>
-
                 <p>
-                    Learn about my university and explore its
-                    academic programs.
+                    Explore my university and its academic programs.
                 </p>
 
-                <!-- Replace with your specific ECPI program homepage. -->
+                <!-- Replace with your specific program homepage. -->
                 <a href="https://www.ecpi.edu/"
                    target="_blank" rel="noopener">
                     ECPI University
@@ -251,18 +260,16 @@
 
             <div id="personalProjects" class="featured-box">
                 <h3>Personal Projects</h3>
-
                 <p>
-                    Explore the project links in my portfolio.
-                    This image link is a placeholder for my work.
+                    Explore my project portfolio using the image below.
                 </p>
 
-                <!-- Replace with an actual personal project URL. -->
+                <!-- Placeholder: replace with a personal project URL. -->
                 <a href="https://github.com"
                    target="_blank" rel="noopener">
                     <img
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23704060'/%3E%3Ctext x='200' y='110' text-anchor='middle' fill='white' font-size='28'%3EMy GitHub Project%3C/text%3E%3C/svg%3E"
-                        alt="Personal GitHub project placeholder">
+                        alt="Personal project placeholder">
                 </a>
             </div>
         </section>
@@ -275,7 +282,7 @@
                 continue building my portfolio.
             </p>
 
-            <!-- Replace placeholder links with actual project URLs. -->
+            <!-- Replace placeholder URLs with actual project links. -->
             <div class="projects">
                 <div class="project">
                     <a href="https://github.com"
@@ -327,7 +334,7 @@
         <section id="contact">
             <h2>Contact Me</h2>
             <p>
-                Complete the form to try a personalized confirmation.
+                Complete the form to see a timed confirmation.
                 This practice form does not send email.
             </p>
 
@@ -351,8 +358,6 @@
                 <button type="submit" id="submitButton">
                     Submit
                 </button>
-
-                <p id="formStatus" role="status"></p>
             </form>
         </section>
     </main>
@@ -362,7 +367,7 @@
     </footer>
 
     <script>
-        // Prompt for a name and personalize the welcome message.
+        // Ask for the visitor's name and update the welcome.
         var visitorName = prompt("What is your name?");
 
         if (visitorName && visitorName.trim() !== "") {
@@ -370,7 +375,7 @@
                 "Welcome, " + visitorName.trim() + "!";
         }
 
-        // Store skills in an array.
+        // Store at least five skills in an array.
         var skills = [
             "HTML",
             "CSS",
@@ -379,7 +384,7 @@
             "GitHub"
         ];
 
-        // Display each skill as a bulleted list item.
+        // Display the skills using a loop.
         var skillsList = document.getElementById("skillsList");
 
         skills.forEach(function(skill) {
@@ -388,7 +393,7 @@
             skillsList.appendChild(listItem);
         });
 
-        // Count the project cards in the Projects section.
+        // Count project cards and select featured groups.
         var projectCount =
             document.querySelectorAll("#projects .project").length;
 
@@ -398,8 +403,7 @@
         var personalProjects =
             document.getElementById("personalProjects");
 
-        // Show both groups with fewer than three projects.
-        // Otherwise, show only Personal Projects.
+        // Show both groups when fewer than three projects exist.
         if (projectCount < 3) {
             universityResources.hidden = false;
             personalProjects.hidden = false;
@@ -408,7 +412,7 @@
             personalProjects.hidden = false;
         }
 
-        // Apply or remove dark mode when the checkbox changes.
+        // Enable and disable dark mode.
         document.getElementById("darkMode").addEventListener(
             "change",
             function() {
@@ -419,11 +423,47 @@
             }
         );
 
+        // Dynamically create a new paragraph in Projects.
+        var projectMessage = document.createElement("p");
+
+        projectMessage.textContent =
+            "My latest portfolio update uses JavaScript to add " +
+            "content, change page elements, and display a timed " +
+            "contact form confirmation.";
+
+        document.getElementById("projects").appendChild(
+            projectMessage
+        );
+
+        // Select and modify the first existing element.
+        var projectsHeading =
+            document.querySelector("#projects h2");
+
+        projectsHeading.textContent =
+            "My Projects and Latest Updates";
+
+        // Select and modify a second existing element.
+        var aboutSection = document.getElementById("about");
+        aboutSection.style.border = "2px solid #b879a1";
+
+        // Create a live region for dynamically added form messages.
         var contactForm = document.getElementById("contactForm");
         var submitButton = document.getElementById("submitButton");
+        var sending = false;
 
-        // Validate the form and display a personalized alert.
-        function showConfirmation() {
+        var statusRegion = document.createElement("div");
+        statusRegion.setAttribute("role", "status");
+        statusRegion.setAttribute("aria-live", "polite");
+        contactForm.appendChild(statusRegion);
+
+        // Validate and begin the simulated submission.
+        function startSubmission(event) {
+            event.preventDefault();
+
+            if (sending) {
+                return;
+            }
+
             if (!contactForm.reportValidity()) {
                 return;
             }
@@ -437,26 +477,39 @@
                 return;
             }
 
-            alert(
-                "Thank you, " + senderName +
-                ", your message has been received for this demonstration!"
-            );
+            // Clear any previous confirmation.
+            statusRegion.textContent = "";
 
-            document.getElementById("formStatus").textContent =
-                "Form demonstration complete. No email was sent.";
+            // Dynamically create the loading message.
+            var statusMessage = document.createElement("p");
+            statusMessage.id = "formStatus";
+            statusMessage.textContent = "Sending message...";
+            statusRegion.appendChild(statusMessage);
+
+            sending = true;
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+            contactForm.setAttribute("aria-busy", "true");
+
+            // Replace the loading message after three seconds.
+            setTimeout(function() {
+                statusMessage.textContent =
+                    "Thank you, " + senderName +
+                    "! Your message was processed successfully " +
+                    "for this demonstration. No email was sent.";
+
+                sending = false;
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit";
+                contactForm.setAttribute("aria-busy", "false");
+            }, 3000);
         }
 
-        // Handle clicks without refreshing the page.
-        submitButton.addEventListener("click", function(event) {
-            event.preventDefault();
-            showConfirmation();
-        });
+        // Handle Submit button clicks.
+        submitButton.addEventListener("click", startSubmission);
 
-        // Support form submission using the keyboard.
-        contactForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            showConfirmation();
-        });
+        // Also support submission using the keyboard.
+        contactForm.addEventListener("submit", startSubmission);
     </script>
 </body>
 </html>
