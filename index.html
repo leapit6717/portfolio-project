@@ -3,11 +3,10 @@
 <head>
     <!--
         Author: Leah Pittman
-        Date: November 3, 2026
-        Purpose: Create an interactive personal portfolio.
-        Display a welcome modal and a Submit button tooltip.
-        Save the dark mode preference using localStorage.
-        Include dynamic content and a timed form confirmation.
+        Date: November 5, 2026
+        Purpose: Display portfolio projects using JavaScript objects.
+        Store project data using JSON and sessionStorage.
+        Create project cards dynamically using DOM methods.
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,13 +35,6 @@
 
         header h1 {
             margin-top: 0;
-        }
-
-        .theme-control {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
         }
 
         nav {
@@ -79,6 +71,13 @@
             color: #704060;
         }
 
+        .theme-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
         .projects {
             display: flex;
             flex-wrap: wrap;
@@ -88,6 +87,9 @@
         .project {
             flex: 1 1 220px;
             min-width: 0;
+            padding: 15px;
+            border: 1px solid #b879a1;
+            border-radius: 8px;
         }
 
         .project img,
@@ -114,7 +116,6 @@
             display: none !important;
         }
 
-        /* Contact form styling. */
         #contactForm label {
             display: block;
             margin-top: 12px;
@@ -160,7 +161,7 @@
             text-align: center;
         }
 
-        /* Show a tooltip on hover or keyboard focus. */
+        /* Submit button tooltip. */
         .tooltip-container {
             position: relative;
             display: inline-block;
@@ -172,17 +173,15 @@
             bottom: calc(100% + 10px);
             left: 0;
             width: 210px;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 8px;
             background: #222;
             color: white;
+            border-radius: 5px;
             text-align: center;
             font-size: 14px;
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.2s;
             pointer-events: none;
-            z-index: 1;
         }
 
         .tooltip-container:hover .tooltip,
@@ -191,8 +190,8 @@
             opacity: 1;
         }
 
-        /* Custom modal and transparent background overlay. */
-        .welcome-modal {
+        /* Welcome modal with a transparent overlay. */
+        dialog {
             width: min(440px, calc(100% - 32px));
             padding: 30px;
             border: none;
@@ -200,34 +199,35 @@
             background: white;
             color: #333;
             text-align: center;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
         }
 
-        .welcome-modal::backdrop {
+        dialog::backdrop {
             background: rgba(0, 0, 0, 0.6);
         }
 
-        .welcome-modal h2 {
+        dialog h2 {
             color: #704060;
         }
 
-        /* Dark mode colors. */
+        /* Dark mode. */
         body.dark-mode {
             background: #161616;
             color: #f5f5f5;
         }
 
-        body.dark-mode section {
+        body.dark-mode section,
+        body.dark-mode dialog {
             background: #262626;
+            color: #f5f5f5;
         }
 
         body.dark-mode header,
         body.dark-mode nav {
             background: #382535;
-            color: white;
         }
 
-        body.dark-mode a {
+        body.dark-mode a,
+        body.dark-mode dialog h2 {
             color: #f4c8e7;
         }
 
@@ -241,22 +241,11 @@
         body.dark-mode .featured-box {
             border-color: #e7b1d5;
         }
-
-        body.dark-mode .welcome-modal {
-            background: #262626;
-            color: #f5f5f5;
-        }
-
-        body.dark-mode .welcome-modal h2 {
-            color: #f4c8e7;
-        }
     </style>
 </head>
 
 <body>
-    <!-- This modal replaces the previous name prompt. -->
     <dialog id="welcomeModal"
-            class="welcome-modal"
             aria-labelledby="modalTitle"
             aria-describedby="modalMessage">
         <h2 id="modalTitle">Welcome to My Portfolio!</h2>
@@ -271,7 +260,7 @@
 
     <header>
         <h1>Leah Pittman's Portfolio</h1>
-        <p id="welcome">Welcome to my portfolio!</p>
+        <p>Welcome to my portfolio!</p>
 
         <label for="darkMode" class="theme-control">
             <input type="checkbox" id="darkMode">
@@ -309,9 +298,7 @@
 
             <div id="universityResources" class="featured-box" hidden>
                 <h3>University Resources</h3>
-                <p>
-                    Explore my university and its academic programs.
-                </p>
+                <p>Explore my university and its academic programs.</p>
 
                 <!-- Replace with your specific program homepage. -->
                 <a href="https://www.ecpi.edu/"
@@ -322,71 +309,20 @@
 
             <div id="personalProjects" class="featured-box">
                 <h3>Personal Projects</h3>
-                <p>
-                    Explore my project portfolio using the image below.
-                </p>
-
-                <!-- Replace this placeholder with your project URL. -->
-                <a href="https://github.com"
-                   target="_blank" rel="noopener">
-                    <img
-                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23704060'/%3E%3Ctext x='200' y='110' text-anchor='middle' fill='white' font-size='28'%3EMy GitHub Project%3C/text%3E%3C/svg%3E"
-                        alt="Personal project placeholder">
-                </a>
+                <p>Explore one of my projects below.</p>
+                <div id="featuredProject"></div>
             </div>
         </section>
 
         <section id="projects">
             <h2>My Projects</h2>
             <p>
-                These project spaces will highlight my work as I
-                continue building my portfolio.
+                These project cards are created automatically
+                from JavaScript project objects.
             </p>
 
-            <!-- Replace placeholder URLs with actual project links. -->
-            <div class="projects">
-                <div class="project">
-                    <a href="https://github.com"
-                       target="_blank" rel="noopener">
-                        <img
-                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23704060'/%3E%3Ctext x='200' y='110' text-anchor='middle' fill='white' font-size='28'%3EWebsite Project%3C/text%3E%3C/svg%3E"
-                            alt="Website project placeholder">
-                    </a>
-                    <h3>Website Project</h3>
-                    <p>
-                        Placeholder for a website project and its
-                        GitHub repository.
-                    </p>
-                </div>
-
-                <div class="project">
-                    <a href="https://github.com"
-                       target="_blank" rel="noopener">
-                        <img
-                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23416878'/%3E%3Ctext x='200' y='110' text-anchor='middle' fill='white' font-size='28'%3EPython Project%3C/text%3E%3C/svg%3E"
-                            alt="Python project placeholder">
-                    </a>
-                    <h3>Python Project</h3>
-                    <p>
-                        Placeholder for a Python program and its
-                        GitHub repository.
-                    </p>
-                </div>
-
-                <div class="project">
-                    <a href="https://github.com"
-                       target="_blank" rel="noopener">
-                        <img
-                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23735d38'/%3E%3Ctext x='200' y='110' text-anchor='middle' fill='white' font-size='28'%3EApp Project%3C/text%3E%3C/svg%3E"
-                            alt="App project placeholder">
-                    </a>
-                    <h3>App Project</h3>
-                    <p>
-                        Placeholder for an app project and its
-                        GitHub repository.
-                    </p>
-                </div>
-            </div>
+            <!-- JavaScript inserts the project cards here. -->
+            <div id="projectList" class="projects"></div>
         </section>
 
         <section id="contact">
@@ -413,20 +349,20 @@
                 <textarea id="message" name="message"
                           rows="5" required></textarea>
 
-                <!-- Tooltip appears above the Submit button. -->
                 <div class="tooltip-container">
-                    <button type="submit"
-                            id="submitButton"
+                    <button type="submit" id="submitButton"
                             aria-describedby="submitTooltip">
                         Submit
                     </button>
 
                     <span id="submitTooltip"
-                          class="tooltip"
-                          role="tooltip">
+                          class="tooltip" role="tooltip">
                         Click to send your message!
                     </span>
                 </div>
+
+                <div id="statusRegion"
+                     role="status" aria-live="polite"></div>
             </form>
         </section>
     </main>
@@ -436,30 +372,21 @@
     </footer>
 
     <script>
-        // Restore the saved dark mode preference.
+        // Restore and save the dark mode preference.
         var darkModeToggle = document.getElementById("darkMode");
 
         try {
             var savedDarkMode =
                 localStorage.getItem("portfolioDarkMode") === "true";
 
-            document.body.classList.toggle(
-                "dark-mode",
-                savedDarkMode
-            );
-
+            document.body.classList.toggle("dark-mode", savedDarkMode);
             darkModeToggle.checked = savedDarkMode;
         } catch (error) {
-            // Keep light mode if browser storage is unavailable.
-            darkModeToggle.checked = false;
+            console.log("Theme storage is unavailable.");
         }
 
-        // Change the theme and save the user's preference.
         darkModeToggle.addEventListener("change", function() {
-            document.body.classList.toggle(
-                "dark-mode",
-                this.checked
-            );
+            document.body.classList.toggle("dark-mode", this.checked);
 
             try {
                 localStorage.setItem(
@@ -467,49 +394,175 @@
                     String(this.checked)
                 );
             } catch (error) {
-                // Theme changes still work without browser storage.
+                console.log("The theme preference could not be saved.");
             }
         });
 
-        // Display the welcome modal when the page loads.
+        // Open and close the welcome modal.
         var welcomeModal = document.getElementById("welcomeModal");
-        var closeModalButton = document.getElementById("closeModal");
 
         welcomeModal.showModal();
 
-        // Close the modal using JavaScript.
-        closeModalButton.addEventListener("click", function() {
-            welcomeModal.close();
-        });
+        document.getElementById("closeModal").addEventListener(
+            "click",
+            function() {
+                welcomeModal.close();
+            }
+        );
 
-        // Store and display skills using an array and loop.
-        var skills = [
-            "HTML",
-            "CSS",
-            "JavaScript",
-            "Python",
-            "GitHub"
-        ];
-
+        // Display skills using an array and a loop.
+        var skills = ["HTML", "CSS", "JavaScript", "Python", "GitHub"];
         var skillsList = document.getElementById("skillsList");
 
         skills.forEach(function(skill) {
-            var listItem = document.createElement("li");
-            listItem.textContent = skill;
-            skillsList.appendChild(listItem);
+            var item = document.createElement("li");
+            item.textContent = skill;
+            skillsList.appendChild(item);
+        });
+
+        // Generate self-contained image URLs for the project objects.
+        function createImageURL(label, color) {
+            var svg =
+                '<svg xmlns="http://www.w3.org/2000/svg" ' +
+                'width="400" height="200">' +
+                '<rect width="400" height="200" fill="' + color + '"/>' +
+                '<text x="200" y="110" text-anchor="middle" ' +
+                'fill="white" font-size="26">' + label + '</text>' +
+                '</svg>';
+
+            return "data:image/svg+xml;charset=UTF-8," +
+                encodeURIComponent(svg);
+        }
+
+        // Define three custom project objects.
+        // Replace repository placeholders with your actual URLs.
+        var websiteProject = {
+            title: "Website Project",
+            summary:
+                "A project space for my HTML and CSS website work. " +
+                "It highlights page structure and design.",
+            imageURL: createImageURL("Website Project", "#704060"),
+            repositoryURL: "https://github.com"
+        };
+
+        var pythonProject = {
+            title: "Python Project",
+            summary:
+                "A project space for my Python programming work. " +
+                "It highlights calculations, lists, and problem solving.",
+            imageURL: createImageURL("Python Project", "#416878"),
+            repositoryURL: "https://github.com"
+        };
+
+        var appProject = {
+            title: "App Project",
+            summary:
+                "A project space for my application development work. " +
+                "It highlights user interfaces and programming skills.",
+            imageURL: createImageURL("App Project", "#735d38"),
+            repositoryURL: "https://github.com"
+        };
+
+        // Place the project objects in an array.
+        var defaultProjects = [
+            websiteProject,
+            pythonProject,
+            appProject
+        ];
+
+        var projects = defaultProjects;
+        var storageKey = "portfolioProjectsV1";
+
+        // Validate stored data before using it to build the page.
+        function validProjects(data) {
+            return Array.isArray(data) && data.every(function(project) {
+                return project !== null &&
+                    typeof project === "object" &&
+                    typeof project.title === "string" &&
+                    typeof project.summary === "string" &&
+                    typeof project.imageURL === "string" &&
+                    typeof project.repositoryURL === "string";
+            });
+        }
+
+        // Store new data, or retrieve and parse existing session data.
+        try {
+            var storedProjects = sessionStorage.getItem(storageKey);
+
+            if (storedProjects === null) {
+                sessionStorage.setItem(
+                    storageKey,
+                    JSON.stringify(defaultProjects)
+                );
+            } else {
+                var parsedProjects = JSON.parse(storedProjects);
+
+                if (!validProjects(parsedProjects)) {
+                    throw new Error("Invalid project data.");
+                }
+
+                projects = parsedProjects;
+            }
+        } catch (error) {
+            // Keep the page working if stored data is damaged or blocked.
+            projects = defaultProjects;
+
+            try {
+                sessionStorage.setItem(
+                    storageKey,
+                    JSON.stringify(defaultProjects)
+                );
+            } catch (storageError) {
+                console.log("Session storage is unavailable.");
+            }
+        }
+
+        // Select the Projects section and its card container.
+        var projectsSection = document.querySelector("#projects");
+        var projectList = projectsSection.querySelector("#projectList");
+
+        // Create each project's image, title, summary, and repository link.
+        projects.forEach(function(project) {
+            var card = document.createElement("article");
+            card.className = "project";
+
+            var imageLink = document.createElement("a");
+            imageLink.href = project.repositoryURL;
+            imageLink.target = "_blank";
+            imageLink.rel = "noopener";
+
+            var image = document.createElement("img");
+            image.src = project.imageURL;
+            image.alt = project.title + " preview";
+
+            var heading = document.createElement("h3");
+            heading.textContent = project.title;
+
+            var summary = document.createElement("p");
+            summary.textContent = project.summary;
+
+            var repositoryLink = document.createElement("a");
+            repositoryLink.href = project.repositoryURL;
+            repositoryLink.target = "_blank";
+            repositoryLink.rel = "noopener";
+            repositoryLink.textContent = "View Repository";
+
+            imageLink.appendChild(image);
+            card.appendChild(imageLink);
+            card.appendChild(heading);
+            card.appendChild(summary);
+            card.appendChild(repositoryLink);
+            projectList.appendChild(card);
         });
 
         // Select featured content based on the project count.
-        var projectCount =
-            document.querySelectorAll("#projects .project").length;
-
         var universityResources =
             document.getElementById("universityResources");
 
         var personalProjects =
             document.getElementById("personalProjects");
 
-        if (projectCount < 3) {
+        if (projects.length < 3) {
             universityResources.hidden = false;
             personalProjects.hidden = false;
         } else {
@@ -517,38 +570,47 @@
             personalProjects.hidden = false;
         }
 
-        // Dynamically add a paragraph to the Projects section.
-        var projectMessage = document.createElement("p");
+        // Add a linked image for the first featured project.
+        if (projects.length > 0) {
+            var featuredLink = document.createElement("a");
+            featuredLink.href = projects[0].repositoryURL;
+            featuredLink.target = "_blank";
+            featuredLink.rel = "noopener";
 
-        projectMessage.textContent =
-            "My latest portfolio update includes a welcome modal, " +
-            "a button tooltip, and a saved dark mode preference.";
+            var featuredImage = document.createElement("img");
+            featuredImage.src = projects[0].imageURL;
+            featuredImage.alt = projects[0].title;
 
-        document.getElementById("projects").appendChild(
-            projectMessage
-        );
+            featuredLink.appendChild(featuredImage);
+            document.getElementById("featuredProject").appendChild(
+                featuredLink
+            );
+        } else {
+            document.getElementById("featuredProject").textContent =
+                "New projects are coming soon.";
+        }
 
-        // Select and modify two existing page elements.
-        var projectsHeading =
-            document.querySelector("#projects h2");
+        // Dynamically add an update paragraph.
+        var updateMessage = document.createElement("p");
+        updateMessage.textContent =
+            "My latest update uses project objects, JSON, and " +
+            "session storage to display my portfolio projects.";
 
-        projectsHeading.textContent =
+        projectsSection.appendChild(updateMessage);
+
+        // Modify two existing page elements.
+        document.querySelector("#projects h2").textContent =
             "My Projects and Latest Updates";
 
-        var aboutSection = document.getElementById("about");
-        aboutSection.style.border = "2px solid #b879a1";
+        document.getElementById("about").style.border =
+            "2px solid #b879a1";
 
-        // Create a live region for form status messages.
+        // Display a loading message and a timed form confirmation.
         var contactForm = document.getElementById("contactForm");
         var submitButton = document.getElementById("submitButton");
+        var statusRegion = document.getElementById("statusRegion");
         var sending = false;
 
-        var statusRegion = document.createElement("div");
-        statusRegion.setAttribute("role", "status");
-        statusRegion.setAttribute("aria-live", "polite");
-        contactForm.appendChild(statusRegion);
-
-        // Display a loading message and delayed confirmation.
         function startSubmission(event) {
             event.preventDefault();
 
@@ -588,7 +650,6 @@
             }, 3000);
         }
 
-        // Support both button clicks and keyboard submission.
         submitButton.addEventListener("click", startSubmission);
         contactForm.addEventListener("submit", startSubmission);
     </script>
